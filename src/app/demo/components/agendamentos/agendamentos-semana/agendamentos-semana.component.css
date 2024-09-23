@@ -1,0 +1,23 @@
+
+.grid {
+    display: flex;
+     /* Usado para alinhar os filhos em linha */
+    flex-wrap: nowrap;
+     /* Evita que os itens quebrem a linha */
+}
+
+.col {
+    flex: 0 0 auto; 
+    /* Garante que as colunas não se estiquem, mantendo seu tamanho original */
+}
+/* Estilos padrão para telas grandes */
+.scroll-container {
+    overflow: hidden; /* Oculta o scroll por padrão */
+}
+
+/* Estilos para telas menores */
+@media (max-width: 1580px) { /* Ajuste o valor conforme necessário */
+    .scroll-container {
+        overflow: auto; /* Exibe o scroll quando a tela for menor que 768px */
+    }
+}

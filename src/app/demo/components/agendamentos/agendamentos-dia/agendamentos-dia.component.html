@@ -1,0 +1,93 @@
+<div class="card px-3 py-3">
+    
+    <p-toast></p-toast>
+    <p-toast position="top-center" key="center"></p-toast>       
+    <p-confirmDialog />
+
+    <div>
+        <span class="text-4xl font-bold text-primary mx-3">Agendamentos</span>
+        <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+    </div>
+    
+    <div class="grid nested-grid grid-nogutter">
+        <p-card class="mb-1 card-bg col p-2">
+            <p-tabView (onChange)="onTabProfChange($event)">
+                <p-tabPanel [header]="getHeaderTodos()">  
+                    <span class="font-bold text-2xl">{{dataSelecionada | date:'fullDate' : '' : 'pt-BR'}}</span>
+                </p-tabPanel>
+                <p-tabPanel [header]="getHeaderProf(prof)" *ngFor="let prof of profissionais">                    
+                    <span class="font-bold text-2xl">{{dataSelecionada | date:'fullDate' : '' : 'pt-BR'}}</span>
+                </p-tabPanel>
+            </p-tabView>
+            <div class="flex flex-column gap-3">
+                <div class="flex-grow-1" *ngFor="let agend of getAgendamentosPorProfissional()">
+                    <p-card class="card-agenda" [ngClass]="getCardClasse(agend.situacao)">
+                        <div class="flex flex-row">
+                            <div class="flex-grow-1">
+                                <div class="mb-3">
+                                    <small class="block text-1xl">Cliente</small>
+                                    <span class="text-2xl">{{agend.clienteNome}}</span>
+                                </div>
+                                <div class="flex flex-row gap-3">
+                                    <div class="">
+                                        <small class="block text-1xl">Horário</small>
+                                        <span class="text-2xl">{{agend.dataInicio | date:'HH:mm' }} - {{agend.dataFim | date:'HH:mm'}}</span>
+                                    </div>                            
+                                    <div class="">
+                                        <small class="block text-1xl">Serviços</small>
+                                        <span class="text-2xl">{{agend.servicosNomes.join(' + ')}}</span>
+                                    </div> 
+                                </div>
+                            </div>
+                            <!-- <div class="mb-3">
+                                <small class="block text-1xl">Profissional</small>
+                                <span class="text-2xl">{{agend.profissionalNome}}</span>
+                            </div> -->                         
+                            <div class="flex flex-none">
+                                <div class="flex flex-column justify-content-between">
+                                    <div class="flex flex-row-reverse">
+                                        <p-tag severity="success" value="Finalizado" *ngIf="agend.situacao == SituacaoAtendimento.FINALIZADO"/>
+                                        <p-tag severity="danger" value="Cancelado" *ngIf="agend.situacao == SituacaoAtendimento.CANCELADO"/>
+                                        <p-tag severity="primary" value="Pendente" *ngIf="agend.situacao == SituacaoAtendimento.PENDENTE"/>
+                                    </div>
+                                    <div>
+                                        <p-button class="m-1" icon="pi pi-search" [rounded]="true" 
+                                        [outlined]="true" severity="secondary" (click)="editAgendamento(agend)"
+                                        pTooltip="Editar" tooltipPosition="top" showDelay="800" hideDelay="200"/>
+                                        <p-button class="m-1" icon="pi pi-check" [rounded]="true" [outlined]="true"
+                                        severity="success" (click)="onChangeSituacao(agend, SituacaoAtendimento.FINALIZADO)"
+                                        pTooltip="Completar" tooltipPosition="top" showDelay="800" hideDelay="200"/>
+                                        <p-button class="m-1" icon="pi pi-times" [rounded]="true" [outlined]="true" 
+                                        severity="danger"(click)="onChangeSituacao(agend, SituacaoAtendimento.CANCELADO)"
+                                        pTooltip="Cancelar" tooltipPosition="top" showDelay="800" hideDelay="200"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-card>
+                </div>
+            </div>
+        </p-card>
+        <div class="col-fixed p-2" style="width: 400px;">
+            <div class="grid grid-nogutter">
+                <p-card class="card-bg col-12 pb-2">
+                    <p-calendar 
+                        class="max-w-full" 
+                        [(ngModel)]="dataSelecionada"
+                        (ngModelChange)="onDiaSelecionadoChange($event)"
+                        [inline]="true" />
+                </p-card>
+                <p-card class="card-bg col-12 pt-2">
+                    <div>
+                        <span class="font-bold text-1xl">Valor estimado: </span>
+                        <span class="font-bold text-2xl">{{getTotalValorAgendamentos() | currency:'BRL': 'symbol':'1.2-2'}}</span>
+                    </div>
+                </p-card>                
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<app-agendamento-dialog [isOpen]="agendamentoDialog" [agendamentoIdEdit]="agendamentoIdEdit" (close)="onDialogClose($event)"></app-agendamento-dialog>

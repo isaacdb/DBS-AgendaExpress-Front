@@ -1,0 +1,47 @@
+<div class="card px-3 py-3">
+    
+    <p-toast></p-toast>
+    <p-confirmDialog />
+
+    <div>
+        <span class="text-4xl font-bold text-primary mx-3">Agendamentos</span>
+        <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+    </div>
+    
+    <div class="scroll-container">            
+    <div class="grid p-3">
+        <div class="col p-0" *ngFor="let dia of diasSemana">
+            <!-- <p-toolbar styleClass="m-1"> -->
+                <h3>{{ dia.diaDescricao }}</h3>
+                <div class="m-1 block" *ngFor="let agend of getAgendamentosPorDia(dia.diaValor)">
+                    <p-card class="mb-1">
+                        <div class="mb-3">
+                            <small class="block text-1xl">Cliente</small>
+                            <span class="text-2xl">{{agend.clienteNome}}</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="block text-1xl">Horário</small>
+                            <span class="text-2xl">{{agend.dataInicio | date:'HH:mm' }} - {{agend.dataFim | date:'HH:mm'}}</span>
+                        </div>                            
+                        <!-- <div class="mb-3">
+                            <small class="block text-1xl">Profissional</small>
+                            <span class="text-2xl">{{agend.profissionalNome}}</span>
+                        </div>                          
+                        <div class="mb-3">
+                            <small class="block text-1xl">Serviços</small>
+                            <span class="text-2xl">{{agend.servicosNomes.join(' + ')}}</span>
+                        </div> -->
+                        <div class="flex flex-row">
+                            <p-button class="m-1" icon="pi pi-search" [rounded]="true" [outlined]="true" severity="secondary" (click)="editAgendamento(agend)" />
+                            <p-button class="m-1" icon="pi pi-check" [rounded]="true" [outlined]="true" severity="success" (click)="updateSituacao(agend.id, 1)" />
+                            <p-button class="m-1" icon="pi pi-times" [rounded]="true" [outlined]="true" severity="danger" />
+                        </div>
+                    </p-card>
+                </div>            
+            <!-- </p-toolbar> -->
+        </div>
+        </div>
+    </div>              
+</div>
+
+<app-agendamento-dialog [isOpen]="agendamentoDialog" [agendamentoIdEdit]="agendamentoIdEdit" (close)="onDialogClose($event)"></app-agendamento-dialog>

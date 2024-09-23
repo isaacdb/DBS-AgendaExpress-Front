@@ -1,0 +1,177 @@
+<div class="card px-3 py-3">
+    <p-toast></p-toast>
+    <p-toast position="top-center" key="center"></p-toast>
+
+    <div>
+        <span class="text-4xl font-bold text-primary mx-3">Profissionais</span>
+        <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+    </div>
+
+    <p-dialog [(visible)]="profissionalDialog" [style]="{width: '450px'}" header="Detalhes do profissional" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+            <form [formGroup]="profissionalForm">
+                <input type="text" pInputText formControlName="contratanteId" id="contratanteId" hidden/>
+                <input type="text" pInputText formControlName="id" id="id" hidden/>
+                <div class="field">
+                    <label for="nome">Nome</label>
+                    <input type="text" pInputText formControlName="nome" id="nome" autofocus/>
+                    <small class="form-error-msg" *ngIf="hasError('nome')">{{errorMsg('nome')}}</small>
+                </div>
+                <div class="field">
+                    <label for="observacao">Observcacao</label>
+                    <textarea id="observacao" formControlName="observacao" pInputTextarea rows="3" cols="20"></textarea>
+                </div>
+                <div class="field">
+                    <label for="documento">Documento</label>
+                    <p-inputMask mask="999.999.999-99" id="documento" formControlName="documento"/>                        
+                </div>
+                <div class="field">
+                    <label for="telefone">Telefone</label>
+                    <p-inputMask mask="99999-9999" id="telefone" formControlName="telefone"/>                        
+                </div>
+                <div class="field">
+                    <label for="email">E-mail</label>
+                    <input id="email" formControlName="email" pInputText type="email"/>
+                    <small class="form-error-msg" *ngIf="hasError('email')">{{errorMsg('email')}}</small>
+                </div>
+            </form>                
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+        </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog />
+
+    <p-dataView #dv [value]="profissionais" [paginator]="true" [rows]="9" filterBy="nome" layout="list">
+        <ng-template pTemplate="header">
+            <div class="flex flex-column md:flex-row md:justify-content-between gap-2">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input type="search" pInputText placeholder="Search by Name" (input)="onFilter(dv, $event)">
+                </span>	
+            </div>
+        </ng-template>   
+        
+        <ng-template let-profissionais pTemplate="listItem">
+            <div class="col-12 px-0" *ngFor="let profissional of profissionais">
+                <p-card>
+                    <div class="flex justify-content-between">
+                        <div>
+                            <div class="font-bold text-5xl">
+                                {{ profissional.nome }}
+                            </div>
+                            <div>
+                                <span class="font-bold text-1xl">Telefone: </span>
+                                <span class="font-bold text-1xl">{{ profissional.telefone }}</span>
+                            </div>
+                            <div>
+                                <span class="font-bold text-1xl">E-mail: </span>
+                                <span class="font-bold text-1xl">{{ profissional.email }}</span>                       
+                            </div>
+                            <div>
+                                <span class="font-bold text-1xl">Obs: </span>
+                                <span class="font-bold text-1xl">{{ profissional.observacao }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(profissional)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(profissional)"></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p-divider />
+
+                    <p-accordion>
+                        <p-accordionTab header="Serviços">
+                            <div>
+                                <div class="flex align-items-center gap-2">
+                                    <p-button severity="success" [rounded]="true" [outlined]="true" icon="pi pi-plus" class="p-button-success mr-1" (click)="openAddServicos(profissional)"></p-button>
+                                </div>
+                                <div class="flex gap-3 pt-3">
+                                    <p-chip [removable]="true" (onRemove)="removeServico(profissional, servico)" *ngFor="let servico of profissional.servicos" >
+                                        <span class="h-3rem flex align-items-center justify-content-center font-bold text-2xl">{{servico.nome}}</span>
+                                    </p-chip>
+                                </div>
+                            </div>
+                        </p-accordionTab>
+                        <p-accordionTab  header="Disponibilidade">
+                            <div>
+                                <div class="flex align-items-center gap-2">
+                                    <p-button severity="success" [rounded]="true" [outlined]="true" icon="pi pi-plus" class="p-button-success mr-1" (click)="openAddExpediente(profissional)"></p-button>                            
+                                </div>
+                                <div class="grid pt-3">
+                                    <div *ngFor="let dia of diasSemana" class="col">
+                                        <div id="content" class="flex flex-column gap-1">
+                                            <span class="font-bold text-2xl mb-3">{{dia.diaDescricao}}</span>                                    
+                                            <p-chip styleClass="bg-primary" [removable]="true" (onRemove)="removeExpediente(profissional, expediente)" 
+                                            *ngFor="let expediente of getExpedientesPorDia(profissional.expedientes, dia.diaValor)">
+                                                <span class="h-3rem flex align-items-center justify-content-center font-bold text-1xl">
+                                                    {{expediente.horarioEntrada.substring(0, 5)}} - {{expediente.horarioSaida.substring(0, 5)}}
+                                                </span>
+                                            </p-chip>
+                                        </div>
+                                    </div>
+                                </div>                            
+                            </div>   
+                        </p-accordionTab>
+                    </p-accordion>                                             
+                </p-card>
+            </div>
+        </ng-template>            
+    </p-dataView>
+
+    <p-dialog [(visible)]="servicoDialog" [style]="{width: '450px'}" header="Serviços" [modal]="true" class="p-fluid">
+            <p-multiSelect 
+            [options]="servicosDisponiveis" 
+            [(ngModel)]="servicosSelecionados" 
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="43"
+            class="multiselect-custom-virtual-scroll"                    
+            [filter]="true"
+            optionLabel="nome" 
+            placeholder="Serviços selecionados"
+            appendTo="body">
+        </p-multiSelect>
+    
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideServicoDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="updateProfissaServicos()"></button>
+        </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="expedienteDialog" [style]="{width: '450px'}" header="Expediente" [modal]="true" class="p-fluid">
+        <div class="field">
+            <p-dropdown  
+                [options]="diasSemana" 
+                [(ngModel)]="diaSelecionado" 
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="43"
+                class="multiselect-custom-virtual-scroll"
+                optionLabel="diaDescricao" 
+                placeholder="Domingo"
+                appendTo="body">
+            </p-dropdown>
+        </div>
+
+        <div class="field">
+            <label for="horarioEntrada">Horário entrada</label>
+            <p-inputMask mask="99:99" id="horarioEntrada" [(ngModel)]="horarioEntrada" /> 
+        </div>
+
+        <div class="field">
+            <label for="horarioSaida">Horário saida</label>
+            <p-inputMask mask="99:99" id="horarioSaida" [(ngModel)]="horarioSaida" /> 
+        </div>                
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideExpedienteDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="updateProfissaExpedientes()"></button>
+    </ng-template>
+</p-dialog>            
+</div>
+

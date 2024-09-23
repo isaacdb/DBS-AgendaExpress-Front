@@ -1,0 +1,92 @@
+<p-dialog [(visible)]="isOpen" [style]="{width: '450px', height: '550px'}" 
+header="Detalhes do agendamento" [modal]="true" class="p-fluid" (onShow)="onOpen()" (onHide)="onHide()">
+    <ng-template pTemplate="content">
+        
+        <div class="flex justify-content-center" *ngIf="isLoading">
+            <p-progressSpinner ariaLabel="loading" />
+        </div>
+
+        <form [formGroup]="agendamentoForm" *ngIf="!isLoading">
+            <input type="text" pInputText formControlName="contratanteId" id="contratanteId" hidden/>
+            <input type="text" pInputText formControlName="id" id="id" hidden/>
+            <div class="field">
+                <label for="cliente">Cliente</label>
+                <p-autoComplete 
+                    formControlName="cliente"
+                    [suggestions]="clientes" 
+                    (completeMethod)="searchCliente($event)" 
+                    field="nome"                   
+                    [ngClass]="{'ng-invalid ng-dirty' : hasError('cliente')}" />
+                    <small class="form-error-msg"  *ngIf="hasError('cliente')">{{errorMsg('cliente')}}</small>                    
+            </div>
+            <div class="field">
+                <label for="servicos">Serviços</label>
+                <p-multiSelect 
+                    [options]="servicos" 
+                    formControlName="servicos" 
+                    optionLabel="nome" 
+                    placeholder="Serviços selecionados"
+                    [filter]="false" 
+                    (onChange)="onServicoSelectChange($event)"
+                    [selectAll]="selectAll"
+                    (onSelectAllChange)="onServicoSelectAllChange($event)"
+                    [ngClass]="{'ng-invalid ng-dirty' : hasError('servicos')}" />
+                    <small class="form-error-msg"  *ngIf="hasError('servicos')">{{errorMsg('servicos')}}</small>                                  
+            </div>
+            <div class="field">
+                <label for="profissional">Profissional</label>
+                <p-dropdown 
+                    formControlName="profissional" 
+                    [options]="profissionaisHabilitados"
+                    optionLabel="nome"
+                    placeholder="Selecione um profissional"
+                    [ngClass]="{'ng-invalid ng-dirty' : hasError('profissional')}" />
+                    <small class="form-error-msg"  *ngIf="hasError('profissional')">{{errorMsg('profissional')}}</small>                    
+            </div>            
+            <div class="field">
+                <label for="observacao">Observcacao</label>
+                <textarea id="observacao" style="resize: none;" formControlName="observacao" pInputTextarea rows="2"></textarea>
+            </div>
+            <div class="flex flex-row gap-2">
+                <div class="field flex-1">
+                    <label for="duracao">Duração</label>
+                    <input id="duracao" pInputText type="number" formControlName="duracao"
+                     [ngClass]="{'ng-invalid ng-dirty' : hasError('duracao')}"
+                     (change)="onDuracaoChance(event)"/>
+                    <small class="form-error-msg"  *ngIf="hasError('duracao')">{{errorMsg('duracao')}}</small>
+                </div>
+                <div class="field flex-1">
+                    <label for="valor">Valor</label>                    
+                    <input id="valor" pInputText currencyMask placeholder="R$" formControlName="valor" [ngClass]="{'ng-invalid ng-dirty' : hasError('valor')}"/>
+                    <small class="form-error-msg"  *ngIf="hasError('valor')">{{errorMsg('valor')}}</small>
+                </div>
+            </div>        
+            <div class="flex flex-row justify-content-between gap-2">
+                <div class="field flex-1">
+                    <label for="data">Data</label>
+                    <p-calendar 
+                        inputId="calendar-24h" 
+                        formControlName="data"                        
+                        dateFormat="dd/mm/yy" 
+                        appendTo="body"
+                        [ngClass]="{'ng-invalid ng-dirty' : hasError('data')}" />
+                        <small class="form-error-msg"  *ngIf="hasError('data')">{{errorMsg('data')}}</small>                    
+                </div>
+                <div class="field  flex-1">
+                    <label for="horarioInicio">Início</label>
+                    <p-inputMask mask="99:99" id="horarioInicio" placeholder="HH:mm" formControlName="horaInicio" [ngClass]="{'ng-invalid ng-dirty' : hasError('data')}" /> 
+                    <small class="form-error-msg"  *ngIf="hasError('horaInicio')">{{errorMsg('horaInicio')}}</small>                    
+                </div>                
+                <div class="field flex-1">
+                    <label for="horarioFim">Fim</label>
+                    <p-inputMask mask="99:99" placeholder="HH:mm"  id="horarioFim" formControlName="horaFim" /> 
+                </div>                                                
+            </div>            
+        </form>                
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="completeAction(false)"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveAgendamento()"></button>
+    </ng-template>
+</p-dialog>

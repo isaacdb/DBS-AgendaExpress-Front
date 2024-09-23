@@ -1,0 +1,4 @@
+.card-bg > .p-card.p-component {
+    background-color: var(--surface-50) !important;
+    padding: 0px;
+}
