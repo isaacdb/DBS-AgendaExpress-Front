@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoginService } from 'src/app/demo/service/login.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { CustomMessageService } from 'src/app/shared/message/custom-message.service';
+import { AuthService } from '../auth.service';
 
 @Component({
     selector: 'app-login',
@@ -22,14 +25,28 @@ export class LoginComponent {
     email!: string;
 
     constructor(public layoutService: LayoutService,
-        private loginService: LoginService
+        private loginService: LoginService,
+        private route: Router,
+        private messageService: CustomMessageService,   
+        private authService: AuthService,     
     ) { }
 
     login(){        
         this.loginService.login(this.email, this.password).subscribe(
             {
-                next: res => {},
-                error: err => {}
+                next: res => {
+                    if(!res.sucesso){
+                        this.messageService.showError(res.erro)
+                        return
+                    }
+
+                    this.authService.login(res)
+                    this.messageService.showSuccessCenter()
+                    this.route.navigate(['/'])
+                },
+                error: err => {
+
+                }
             }
         )
     }

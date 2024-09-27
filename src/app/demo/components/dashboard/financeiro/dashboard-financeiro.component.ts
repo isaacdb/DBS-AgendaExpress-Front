@@ -40,7 +40,6 @@ export class DashboardFinanceiroComponent implements OnInit {
         this.dashboardService.get(new Date(2024, 6, 1), new Date(2024, 6, 30)).subscribe({
             next: res => {
                 this.dashboardData = res;
-                console.log("🚀 ~ DashboardFinanceiroComponent ~ this.dashboardService.get ~ res:", res)
                 this.updateGraficoData();
             },
             error: err => {}

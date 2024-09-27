@@ -17,12 +17,24 @@ export class CustomMessageService {
     });
   }
 
+  showSuccessCenter(message: string = ''): void {
+    let msg = message == '' ? 'Operação realizada com sucesso!' : message;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successo',
+      detail: msg,      
+      key: 'center',
+      life: 3000
+    });
+  }
+
   showError(message: string = ''): void {
     let msg = message == '' ? 'Erro ao completar operação!' : message;    
     this.messageService.add({
       severity: 'error',
       summary: 'Erro',
-      detail: msg,
+      detail: msg,      
+      key: 'center',   
       life: 3000
     });
   }
