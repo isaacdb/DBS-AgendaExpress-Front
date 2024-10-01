@@ -8,20 +8,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
+import { MySharedModule } from "../../../../shared/shared.module";
 
 @NgModule({
     imports: [
-        CommonModule,
-        LoginRoutingModule,
-        ButtonModule,
-        CheckboxModule,
-        InputTextModule,
-        FormsModule,
-        PasswordModule,
-        FormsModule,        
-        ReactiveFormsModule,
-        ToastModule,
-    ],
+    CommonModule,
+    LoginRoutingModule,
+    ButtonModule,
+    CheckboxModule,
+    InputTextModule,
+    FormsModule,
+    PasswordModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ToastModule,
+    MySharedModule,
+    
+],
     declarations: [RegisterComponent]
 })
 export class RegisterModule { }

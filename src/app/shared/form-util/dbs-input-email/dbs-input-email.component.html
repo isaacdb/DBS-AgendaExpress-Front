@@ -1,0 +1,14 @@
+<div class="flex flex-column gap-1 field">
+    <label for="customInput">E-mail</label>
+    <input
+      pInputText
+      type="email"
+      id="customInput"
+      [ngClass]="{'is-invalid': hasError()}"
+      [value]="value"
+      (input)="handleInput($event.target.value)"
+      (blur)="onTouched()"
+    />
+    <small class="form-error-msg" *ngIf="hasError()">{{errorMsg()}}</small>
+  </div>
+  

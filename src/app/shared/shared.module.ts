@@ -16,6 +16,13 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDeleteDialogComponent } from './dialog/excluir/confirm-delete-dialog.component';
 import { NgxCurrencyDirective } from 'ngx-currency';
+import { DbsInputNomeComponent } from './form-util/dbs-input-nome/dbs-input-nome.component';
+import { DbsInputMoedaComponent } from './form-util/dbs-input-moeda/dbs-input-moeda.component';
+import { DbsInputEmailComponent } from './form-util/dbs-input-email/dbs-input-email.component';
+import { InputMaskModule } from 'primeng/inputmask';
+import { DbsInputTelefoneComponent } from './form-util/dbs-input-telefone/dbs-input-telefone.component';
+import { DbsInputDocumentoComponent } from './form-util/dbs-input-documento/dbs-input-documento.component';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 @NgModule({
     imports: [
@@ -35,12 +42,25 @@ import { NgxCurrencyDirective } from 'ngx-currency';
         InputNumberModule,
         DialogModule,
         NgxCurrencyDirective,
+        InputMaskModule,
+        NgxMaskDirective, 
+        NgxMaskPipe,
     ],
     declarations: [
         ConfirmDeleteDialogComponent,
+        DbsInputNomeComponent,
+        DbsInputMoedaComponent,
+        DbsInputEmailComponent,
+        DbsInputTelefoneComponent,
+        DbsInputDocumentoComponent,
     ],
     exports:[
         ConfirmDeleteDialogComponent,
+        DbsInputNomeComponent,
+        DbsInputMoedaComponent,
+        DbsInputEmailComponent,
+        DbsInputTelefoneComponent,
+        DbsInputDocumentoComponent,
     ]
 })
 export class MySharedModule { }

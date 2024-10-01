@@ -29,7 +29,7 @@ export class CrudClientesComponent implements OnInit {
         this.clienteForm = fb.group({
             id: [null],
             contratanteId: [null],
-            nome: [null, Validators.required],
+            nome: [null],
             observacao: [null],
             telefone: [null],
             email: [null, [Validators.email]],

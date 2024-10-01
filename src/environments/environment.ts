@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  agendaExpress: 'https://localhost:32775/api',
-  authentication: 'https://localhost:32773/api'  
+  agendaExpress: 'https://localhost:32771/api',
+  authentication: 'https://localhost:32769/api'  
 };
 
 /*

@@ -39,6 +39,11 @@ export class RegisterComponent {
     }
 
     register(){
+        if(!this.form.valid){
+            console.log(this.form)
+            return
+        }
+
         var registerObj = this.form.getRawValue();
 
         this.loginService.register(registerObj).subscribe(

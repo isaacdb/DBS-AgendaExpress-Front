@@ -1,0 +1,16 @@
+<div class="flex flex-column gap-1 field">
+    <label for="customInput">Telefone</label>
+    <input    
+    pInputText
+    inputmode="numeric"
+    type="text"
+    [ngClass]="{'is-invalid': hasError()}"
+    [value]="value"
+    (input)="handleInput($event.target.value)"
+    (blur)="onTouched()"
+    mask="(00) 0 0000-0000"
+    placeholder="DDD + Telefone"
+    />
+    <small class="form-error-msg" *ngIf="hasError()">{{errorMsg()}}</small>
+  </div>
+  

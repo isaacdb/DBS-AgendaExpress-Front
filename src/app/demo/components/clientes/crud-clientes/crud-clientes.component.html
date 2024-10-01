@@ -64,28 +64,14 @@
         <form [formGroup]="clienteForm">
             <input type="text" pInputText formControlName="contratanteId" id="contratanteId" hidden/>
             <input type="text" pInputText formControlName="id" id="id" hidden/>
-            <div class="field">
-                <label for="nome">Nome</label>
-                <input type="text" pInputText formControlName="nome" id="nome" autofocus/>
-                <small class="form-error-msg" *ngIf="hasError('nome')">{{errorMsg('nome')}}</small>
-            </div>
+            <dbs-input-nome [control]="clienteForm.get('nome')" nome="Nome" formControlName="nome"></dbs-input-nome>
             <div class="field">
                 <label for="observacao">Observcacao</label>
                 <textarea id="observacao" formControlName="observacao" pInputTextarea rows="3" cols="20"></textarea>
             </div>
-            <div class="field">
-                <label for="documento">Documento</label>
-                <p-inputMask mask="999.999.999-99" id="documento" formControlName="documento"/>                        
-            </div>
-            <div class="field">
-                <label for="telefone">Telefone</label>
-                <p-inputMask mask="99999-9999" id="telefone" formControlName="telefone"/>                        
-            </div>
-            <div class="field">
-                <label for="email">E-mail</label>
-                <input id="email" formControlName="email" pInputText type="email"/>
-                <small class="form-error-msg" *ngIf="hasError('email')">{{errorMsg('email')}}</small>
-            </div>
+            <dbs-input-telefone [control]="clienteForm.get('documento')" formControlName="documento"></dbs-input-telefone>
+            <dbs-input-telefone [control]="clienteForm.get('telefone')" formControlName="telefone"></dbs-input-telefone>
+            <dbs-input-email [control]="clienteForm.get('email')" formControlName="email"></dbs-input-email>
         </form>                
     </ng-template>
 

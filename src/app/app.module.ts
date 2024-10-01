@@ -11,6 +11,7 @@ import { NgxCurrencyConfig, NgxCurrencyInputMode, provideEnvironmentNgxCurrency 
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfissionalService } from './demo/service/profissional.service';
 import { AgendamentoService } from './demo/service/agendamento.service';
+import { IConfig, NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask, provideNgxMask } from 'ngx-mask';
 
 // Para usar a diretiva currency usando a formtação padrão sendo reais pt-Br
 export const CustomCurrencyMaskConfig: NgxCurrencyConfig = {
@@ -27,6 +28,10 @@ export const CustomCurrencyMaskConfig: NgxCurrencyConfig = {
     max: 999999,
     inputMode: NgxCurrencyInputMode.Financial,
 }
+
+export const maskConfig: Partial<IConfig> = {
+    validation: false,
+  };
 
 // Para usar as formatações com PIPE para datas em formatação pt-BR
 import { registerLocaleData } from '@angular/common';
@@ -46,6 +51,9 @@ registerLocaleData(localePT);
         AppLayoutModule,
         MySharedModule,
         NoopAnimationsModule,
+        NgxMaskDirective, 
+        NgxMaskPipe,
+
     ],
     providers: 
     [
@@ -60,6 +68,7 @@ registerLocaleData(localePT);
         ConfirmationService,
         LoginService,
         provideEnvironmentNgxCurrency(CustomCurrencyMaskConfig),
+        provideEnvironmentNgxMask(maskConfig)
     ],
     bootstrap: [AppComponent],
 })
